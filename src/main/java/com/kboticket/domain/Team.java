@@ -22,7 +22,9 @@ public class Team {
 
     private String name;
 
-    private String stadium;
+    @ManyToOne
+    @JoinColumn(name = "stadium_id", nullable = false)
+    private Stadium stadium;
 
     @OneToMany(mappedBy = "homeTeam")
     private List<Game> homeGames;

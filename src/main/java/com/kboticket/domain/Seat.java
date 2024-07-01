@@ -20,4 +20,21 @@ public class Seat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
+
+    private String seatBlock;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reserved")
+    private RsrvStatus reserved = RsrvStatus.VACANCY;
+
+    private int price;
+
+    public void isReserved() {
+        this.reserved = RsrvStatus.RESERVED;
+    }
+
+    public void cancelReserved() {
+        this.reserved = RsrvStatus.VACANCY;
+    }
 }

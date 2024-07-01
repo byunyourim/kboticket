@@ -25,4 +25,8 @@ public class Stadium {
 
     @OneToMany(mappedBy = "stadium")
     private List<Seat> seats;
+
+    @OneToMany(mappedBy = "stadium")
+    private List<Team> teams;
+
 }
