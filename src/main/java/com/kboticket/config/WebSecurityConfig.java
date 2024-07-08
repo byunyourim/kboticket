@@ -1,7 +1,6 @@
 package com.kboticket.config;
 
 import com.kboticket.config.jwt.JwtTokenProvider;
-import com.kboticket.service.LoginService;
 import com.kboticket.service.LogoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -38,13 +37,12 @@ public class WebSecurityConfig{
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         return http
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers( "/login",
-                            "/users/signup",
+                            "/users/**",
                             "/api/sms/**",
-                            "/user"
+                            "/terms/**"
                     ).permitAll()
                     .anyRequest().authenticated())
                 .logout(logout -> logout
