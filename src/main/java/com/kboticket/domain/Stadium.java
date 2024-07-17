@@ -13,12 +13,8 @@ import java.util.List;
 public class Stadium {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stadium_id")
-    private Long id;
-
-    @OneToOne(mappedBy = "stadium", fetch = FetchType.LAZY)
-    private Game game;
+    private String id;
 
     private String name;
 

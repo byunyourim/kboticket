@@ -20,8 +20,8 @@ public class OrderController {
     @PostMapping("/order")
     @ResponseStatus(HttpStatus.CREATED)
     public void order(@RequestParam("userId") Long userId,
-                        @RequestParam("gameId") Long gameId,
-                        @RequestParam("seatIds") Long[] seatIds) {
+                      @RequestParam("gameId") Long gameId,
+                      @RequestParam("seatIds") Long[] seatIds) {
         orderService.order(userId, gameId, seatIds);
     }
 
