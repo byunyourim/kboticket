@@ -8,10 +8,7 @@ import com.kboticket.domain.User;
 import com.kboticket.dto.TokenDto;
 import com.kboticket.dto.UserSignupRequest;
 import com.kboticket.enums.ErrorCode;
-import com.kboticket.exception.EmailDuplicateException;
-import com.kboticket.exception.InvalidVerificationKeyException;
-import com.kboticket.exception.PasswordMismatchException;
-import com.kboticket.exception.TermsNotFoundException;
+import com.kboticket.exception.*;
 import com.kboticket.repository.TermsRepository;
 import com.kboticket.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,16 +37,16 @@ public class UserService {
     public void signup(UserSignupRequest request) {
         // 이메일 중복 검사
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new EmailDuplicateException(ErrorCode.EMAIL_DUPLICATTE);
+            throw new KboTicketException(ErrorCode.EMAIL_DUPLICATTE);
         }
         // password 와 confirmpassword 비교
         if (!request.getPassword().equals(request.getConfirmpassword())) {
-            throw new PasswordMismatchException(ErrorCode.PASSWORD_MISMATCH);
+            throw new KboTicketException(ErrorCode.PASSWORD_MISMATCH);
         }
         // 인증키 확인
         String phone = jwtTokenProvider.getPhoneFromToken(request.getVerificationKey());
         if (phone == null) {
-            throw new InvalidVerificationKeyException(ErrorCode.INVALID_VERIFICATION_CODE);
+            throw new KboTicketException(ErrorCode.INVALID_VERIFICATION_CODE);
         }
 
         User user = User.builder()
@@ -63,7 +60,7 @@ public class UserService {
 
                     TermsPk termsPk = new TermsPk(t.getTitle(), t.getVersion());
                     Terms terms = termsRepository.findById(termsPk)
-                            .orElseThrow(() -> new TermsNotFoundException(ErrorCode.TERM_NOT_FOUND_EXCEPTION));
+                            .orElseThrow(() -> new KboTicketException(ErrorCode.TERM_NOT_FOUND_EXCEPTION));
 
                     return new Agreed(terms, user, LocalDateTime.now());
                 })
@@ -96,6 +93,11 @@ public class UserService {
 
         return new TokenDto(newAccessToken, refreshToken);
 
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new KboTicketException(ErrorCode.NOT_FOUND_USER));
     }
 
 
